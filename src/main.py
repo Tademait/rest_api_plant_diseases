@@ -24,7 +24,13 @@ class PredictionModel:
 
     def load_model(self, path_to_model: str):
         # Load model
-        self.model: keras = keras.models.load_model(path_to_model)
+        # Define custom objects for loading the model
+        self.model = keras.models.load_model(path_to_model)
+        # self.model.compile(loss="sparse_categorical_crossentropy",
+        #        optimizer="nadam",
+        #        metrics=["accuracy"])
+        print("Succsefully loaded model")
+        print(self.model.summary())
 
     @staticmethod
     def prepare_data(data):
@@ -37,9 +43,9 @@ class PredictionModel:
     def predict(self, data):
         # Predict
         if not self.model:
-            raise FileNotFoundError #todo implement own Error class
-        prepared_data = self.prepare_data()
-        self.model.predict(prepared_data)
+            raise NotImplementedError #todo implement own Error class
+        # prepared_data = self.prepare_data()
+        return self.model.predict(data)
 app = FastAPI()
 def prepare_analyzer():
     return Analyzer()
@@ -54,23 +60,35 @@ async def predict():
     # print(type(identif.image))
     return {"list of predictions"}
 
-@app.post("/uploadfile")
+@app.post("/api/v1/uploadfile")
 async def create_upload_file(image: UploadFile = File(...), plant: str = Form(...)):
     contents = await image.read()
     img = Image.open(io.BytesIO(contents))
-    img.show()
+    # img.show()
     
     # Convert image to numpy array
     np_array = np.array(img)
-    print(np_array)
+    print(np.info(np_array))
+    tomato_model = PredictionModel()
+    tomato_model.load_model("tomato_model/v1/")
+    
+    np_array = np_array / 255.0
+    # add extra dimension for batch size
+    input_batch = np.expand_dims(np_array, axis=0) 
+    print(tomato_model.model.input_shape)
+    print(input_batch)
+    tomato_model.model.compile()
+    predictions = tomato_model.predict(input_batch)
+    print(" | Prediction list: |")
+    print(predictions)
     return {"image received successfully": image.filename, "yes" : plant}
     
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="localhost", port=8000)
-    tomato_model = PredictionModel()
-    tomato_model.load_model("tomato_model/v1/")
-    plant_models = {"tomato": tomato_model}
+    # tomato_model = PredictionModel()
+    # tomato_model.load_model("tomato_model/v1/")
+    # plant_models = {"tomato": tomato_model}
     analyzer_obj = prepare_analyzer()
     
     # when calling the identify endpoint:
