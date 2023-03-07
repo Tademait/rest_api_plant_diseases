@@ -21,3 +21,8 @@ pozn.:
 # Image data augmentation
 > Note that image data augmentation layers are only active during training (similarly to the Dropout layer).
 (https://keras.io/guides/preprocessing_layers/)
+
+
+running:
+
+> `uvicorn main:app --app-dir=src`
