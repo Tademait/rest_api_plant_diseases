@@ -1,3 +1,10 @@
+from dotenv import load_dotenv
+import os
+
+# load all the secret .env variables
+load_dotenv()
+DB_CONNECTION_STRING = os.getenv("DB_CONNECTION_STRING")
+
 # points plant to according model
 MODELS = {"tomato": "tomato_model/v1/"}
 

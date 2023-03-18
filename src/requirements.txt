@@ -4,3 +4,6 @@ tensorflow
 numpy
 uvicorn
 python-multipart
+sqlalchemy
+psycopg2
+python-dotenv
