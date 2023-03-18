@@ -51,6 +51,13 @@ def get_db():
 async def root():
     return {"message": "Server health page - running"}
 
+@app.get("/test_db")
+async def test_db(db: database.Database = Depends(get_db)):
+    plants = db.query_all_plants()
+    if not plants:
+        return {"error": "No plants available"}
+    return {f"plant_{i}": plant.name for i, plant in enumerate(plants)}
+
 
 @app.post("/api/v1/uploadfile")
 async def create_upload_file(analyzer: Analyzer = Depends(get_analyzer), image: UploadFile = File(...), plant: str = Form(...)):
