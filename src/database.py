@@ -26,7 +26,12 @@ class Database():
 
     def query_disease_detail_specify_plant(self, disease_name, plant_name):
         with Session(bind=self.engine) as session:
-            return session.query(Disease).join(Plant.diseases).filter(Plant.name == plant_name.lower()).filter(Disease.name == disease_name.lower()).first()
+            disease = session.query(Disease).join(Plant.diseases).filter(Plant.name == plant_name.lower()).filter(Disease.name == disease_name.lower()).first()
+            if not disease:
+                return None
+            disease.pictures # this needs to be called because of lazy-loading applied to Relationship object
+            disease_summary = disease.__dict__
+            return disease_summary
 
 
 class Plant(Base):
@@ -62,7 +67,4 @@ class Picture(Base):
     disease_id = Column(Integer, ForeignKey('disease.id'))
     
     def __repr__(self):
-        return f"<Disease(id={self.id} name='{self.name}')>"
-
-db = Database()
-print(db.query_disease_detail_specify_plant("Early blight", "tomato"))
+        return f"<Picture(id={self.id})>"
