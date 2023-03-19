@@ -35,3 +35,13 @@ pip install -r requirements.txt
 > `uvicorn main:app --app-dir=src`
 
 For a specific port, use the --port <port_number> flag.
+
+TODO:
+# popsat lehce instalaci pythonu a pipu
+# popsat spouštění venv
+# popsat instalaci knihoven
+# popsat všechny endpointy
+# popsat lehce strukturu adresáře a souborů
+# zmínit .env file
+# popsat tipy na setupnutí databáze
+# zmínit odkaz na frontend
