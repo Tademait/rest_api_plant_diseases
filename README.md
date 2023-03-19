@@ -1,14 +1,8 @@
-# README file for the Plant Disease Detection API
+# README file for the Plant Disease Identification API
 
-A simple REST API that receives get requests to analyze plant disease images
-and returns the disease names and the confidence level of the prediction.
-
-plan:
-    + iterate through all the model files / folders and import each one of them as an object
-    with its plant name that can then be used as key when sending the API request
-    + create a function that receives the image and returns the prediction
-    + create some basic authentication for the API (based on probably a secret token/key))
-    + endpoints should be /api/v1/... <- specify the used model as either an id or a GET / POST parameter
+A REST API and a plant disease identification app backend that handles database queries, 
+requests to analyze plant disease images and which returns the disease names and the
+confidence level of the prediction.
 
 pozn.:
 + data augmentation layer probably implicitly gets ignored when using the model.predict() function
@@ -23,12 +17,59 @@ pozn.:
 
 # Setup:
 
-+ Preferably use a Python venv environment (https://docs.python.org/3/library/venv.html)
-+ Install required libraries:
+## Install Python
+Depending on your distribution, install python 3 and pip. For example, on Ubuntu:
 
 ```
-pip install -r requirements.txt
+sudo apt install python3 python3-pip
 ```
+You can also install python from the official website: https://www.python.org/downloads/
+The application is tested and live version is running on Python 3.10.7
+
+## Setup virtual environment
++ Preferably use a Python venv environment (https://docs.python.org/3/library/venv.html)
+> Note: you can skip this step, although it is recommended for managing your python dependencies.
+
+```
+python -m venv myenv_name
+```
+
+To activate the venv on Windows, run:
+  
+```
+myenv_name\Scripts\activate.bat
+```
+For Linux/macOS:
+
+```
+source myenv_name/bin/activate
+```
+To later deactivate the venv, run:
+
+```
+deactivate
+```
+
+With your venv activated, you can now install the required libraries.
+
+
+## Install required libraries
+
+```
+pip install -r src/requirements.txt
+```
+
+## Setup database and .env file
++ You need to create a new PostgreSQL database (recommended version 15):
+https://www.digitalocean.com/community/tutorials/how-to-install-postgresql-on-ubuntu-20-04-quickstart
+
+You also need to create a .env file inside the `src/` directory for a secret connection string. Set the
+database connection string in the .env file as the following example, replacing the respective values with your own:
+
+```
+DB_CONNECTION_STRING="postgresql://username:password@domain:port/db_name"
+```
+
 
 # Run:
 
@@ -36,12 +77,16 @@ pip install -r requirements.txt
 
 For a specific port, use the --port <port_number> flag.
 
-TODO:
-# popsat lehce instalaci pythonu a pipu
-# popsat spouštění venv
-# popsat instalaci knihoven
-# popsat všechny endpointy
-# popsat lehce strukturu adresáře a souborů
-# zmínit .env file
-# popsat tipy na setupnutí databáze
-# zmínit odkaz na frontend
+# Project overview
+You can find all the available endpoints on the /docs page.
+For example, if you are running the server on localhost, you can access the docs page at http://localhost:8000/docs
+
+The main structure of the project is as follows:
+
+the `src` directory contains the trained tensorflow models. The models are loaded in the `main.py` file,
+which is the entry point of the application. They are loaded based on the paths provided in `config.py`.
+The `main.py` file contains the FastAPI endpoints and handling of the incoming requests. The database
+communication and ORM classes are handled inside the `database.py` file. 
+
+Currently, a live version of the application is hosted at `render.com` with database being hosted on
+a dedicated VPS at `digitalocean.com`. The live REST API can be accessed at https://plant-rest-api.onrender.com (note that it might take several minutes to spin-up the sleeping container).
