@@ -8,6 +8,7 @@ from error import ModelNotAvailableError
 import database
 import json
 
+
 class Analyzer:
     def __init__(self) -> None:
         self.models: dict = {}
@@ -92,6 +93,19 @@ async def disease_detail(disease_name: str = Form(...), plant_name: str = Form(.
         print("query returned None")
         return
     return disease_summary
+
+
+@app.post("/api/v1/disease_list")
+async def disease_list(plant_name: str = Form(...), database: database.Database = Depends(get_db)):
+    disease_list = db.query_all_diseases_for_plant(plant_name=plant_name)
+    if not disease_list:
+        pass #TODO return error response here
+        print("query returned None")
+        return
+    return disease_list
+
+
+
 
 if __name__ == "__main__":
     import uvicorn

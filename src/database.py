@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, Column, Integer, String, Text, ForeignKey
-from sqlalchemy.orm import Session, Relationship, backref, declarative_base
+from sqlalchemy.orm import Session, Relationship, backref, declarative_base, joinedload
 import config
 
 
@@ -17,7 +17,10 @@ class Database():
     
     def query_all_diseases_for_plant(self, plant_name):
         with Session(bind=self.engine) as session:
-            return session.query(Disease).join(Plant.diseases).filter(Plant.name == plant_name.lower()).all()
+            diseases = session.query(Disease).join(Plant.diseases).filter(Plant.name == plant_name.lower()).options(joinedload(Disease.pictures)).all()
+            if not diseases:
+                return None
+            return [disease.__dict__ for disease in diseases]
     
     # deprecated, some diseases have a common name among multiple plants
     def query_disease_detail(self, disease_name):
