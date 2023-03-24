@@ -6,11 +6,10 @@ import numpy as np
 import config
 from error import ModelNotAvailableError
 import database
-import json
 
 
 class Analyzer:
-    def __init__(self) -> None:
+    def __init__(self):
         self.models: dict = {}
 
     def load_all_models(self):
@@ -29,7 +28,7 @@ class PredictionModel:
 
     def load_model(self, path_to_model: str):
         self.model = keras.models.load_model(path_to_model)
-        print(f"Succsefully loaded model from {path_to_model}")
+        print(f"Succesefully loaded model from {path_to_model}")
         
     def predict(self, data):
         if not self.model:
@@ -56,14 +55,14 @@ async def root():
 async def test_db(db: database.Database = Depends(get_db)):
     plants = db.query_all_plants()
     if not plants:
-        return {"error": "No plants available"}
-    return {f"plant_{i}": plant.name for i, plant in enumerate(plants)}
+        raise HTTPException(status_code=404, detail="No disease available in database")
+    return [{f"plant": plant.name} for plant in plants]
 
 
 @app.post("/api/v1/uploadfile")
 async def create_upload_file(analyzer: Analyzer = Depends(get_analyzer), image: UploadFile = File(...), plant: str = Form(...)):
     if plant not in analyzer.models.keys():
-        raise HTTPException(status_code=400, detail="There is no model available for the provided plant")
+        raise HTTPException(status_code=404, detail="No model available for the provided plant")
     
     contents = await image.read()
     img = Image.open(io.BytesIO(contents))
@@ -80,18 +79,17 @@ async def create_upload_file(analyzer: Analyzer = Depends(get_analyzer), image: 
     input_batch = np.expand_dims(np_array, axis=0) 
 
     predictions = pred_model.predict(input_batch)
-
-    api_data = {pred_model.labels[i]: float(predictions[0][i]) for i in range(len(pred_model.labels))}
-    return api_data
+    predictions = [{"name": pred_model.labels[i], "percentage": float(predictions[0][i])} for i in range(len(pred_model.labels))]
+    predictions.sort(key=lambda x: x["percentage"], reverse=True)
+    top_predictions = predictions[:5]
+    return top_predictions
 
 
 @app.post("/api/v1/disease_detail")
 async def disease_detail(disease_name: str = Form(...), plant_name: str = Form(...), database: database.Database = Depends(get_db)):
     disease_summary = db.query_disease_detail_specify_plant(disease_name=disease_name, plant_name=plant_name)
     if not disease_summary:
-        pass #TODO return error response here
-        print("query returned None")
-        return
+        raise HTTPException(status_code=404, detail="Disease not found")
     return disease_summary
 
 
@@ -99,12 +97,8 @@ async def disease_detail(disease_name: str = Form(...), plant_name: str = Form(.
 async def disease_list(plant_name: str = Form(...), database: database.Database = Depends(get_db)):
     disease_list = db.query_all_diseases_for_plant(plant_name=plant_name)
     if not disease_list:
-        pass #TODO return error response here
-        print("query returned None")
         return
     return disease_list
-
-
 
 
 if __name__ == "__main__":
