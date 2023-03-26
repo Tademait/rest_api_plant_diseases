@@ -60,11 +60,11 @@ async def test_db(db: database.Database = Depends(get_db)):
 
 
 @app.post("/api/v1/uploadfile")
-async def create_upload_file(analyzer: Analyzer = Depends(get_analyzer), image: UploadFile = File(...), plant: str = Form(...)):
+async def create_upload_file(analyzer: Analyzer = Depends(get_analyzer), image1: UploadFile = File(...), image2: UploadFile = File(...), plant: str = Form(...)):
     if plant not in analyzer.models.keys():
         raise HTTPException(status_code=404, detail="No model available for the provided plant")
     
-    contents = await image.read()
+    contents = await image1.read()
     img = Image.open(io.BytesIO(contents))
     img = img.resize((256, 256))
 
@@ -73,7 +73,7 @@ async def create_upload_file(analyzer: Analyzer = Depends(get_analyzer), image: 
     pred_model = analyzer.models[plant]
 
     # normalize the values
-    #np_array = np_array / 255.0
+    np_array = np_array / 255.0
     
     # add extra dimension for batch size
     input_batch = np.expand_dims(np_array, axis=0) 
