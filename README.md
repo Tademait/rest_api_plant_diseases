@@ -93,4 +93,5 @@ a dedicated VPS at `digitalocean.com`. The live REST API can be accessed at http
 
 # Credits
 App is developed under the [Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/legalcode) license.
-Plant information, treatment and example disease images are sourced from the [PlantVillage website](https://plantvillage.psu.edu/plants)
+
+Plant information, treatment and example disease images are sourced from the [PlantVillage website](https://plantvillage.psu.edu)
