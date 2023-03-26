@@ -90,3 +90,7 @@ communication and ORM classes are handled inside the `database.py` file.
 
 Currently, a live version of the application is hosted at `render.com` with database being hosted on
 a dedicated VPS at `digitalocean.com`. The live REST API can be accessed at https://plant-rest-api.onrender.com (note that it might take several minutes to spin-up the sleeping container).
+
+# Credits
+App is developed under the [Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/legalcode) license.
+Plant information, treatment and example disease images are sourced from the [PlantVillage website](https://plantvillage.psu.edu/plants)
