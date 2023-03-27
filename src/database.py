@@ -16,7 +16,7 @@ class Database():
             plants = session.query(Plant).all()
             if not plants:
                 return None
-            return [plant.__dict__ for plant in plants]
+            return {"plants": [plant.name for plant in plants]}
     
     def query_all_diseases_for_plant(self, plant_name):
         with Session(bind=self.engine) as session:
