@@ -100,6 +100,20 @@ async def disease_list(plant_name: str = Form(...), database: database.Database 
         return
     return disease_list
 
+@app.get("/api/v1/plant_list")
+async def plant_list():
+    plant_list = db.query_all_plants()
+    if not plant_list:
+        raise HTTPException(status_code=404, detail="No plants found")
+    return plant_list
+
+@app.get("/api/v1/news_list")
+async def news_list():
+    news_list = db.query_all_news()
+    if not news_list:
+        raise HTTPException(status_code=404, detail="No news found")
+    return news_list
+
 
 if __name__ == "__main__":
     import uvicorn
