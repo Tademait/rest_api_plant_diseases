@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Text, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, Text, ForeignKey, DateTime, text
 from sqlalchemy.orm import Session, Relationship, backref, declarative_base, joinedload
 import config
 
@@ -13,7 +13,10 @@ class Database():
         
     def query_all_plants(self):
         with Session(bind=self.engine) as session:
-            return session.query(Plant).all()
+            plants = session.query(Plant).all()
+            if not plants:
+                return None
+            return [plant.__dict__ for plant in plants]
     
     def query_all_diseases_for_plant(self, plant_name):
         with Session(bind=self.engine) as session:
@@ -35,6 +38,20 @@ class Database():
             disease.pictures # this needs to be called because of lazy-loading applied to Relationship object
             disease_summary = disease.__dict__
             return disease_summary
+
+    def query_all_news(self):
+        with Session(bind=self.engine) as session:
+            news = session.query(News).all()
+            if not news:
+                return None
+            return [news_item.__dict__ for news_item in news]
+
+    def add_news(self, title, body):
+        with Session(bind=self.engine) as session:
+            news = News(title=title, body=body)
+            session.add(news)
+            session.commit()
+            return (news in session)
 
 
 class Plant(Base):
@@ -71,3 +88,21 @@ class Picture(Base):
     
     def __repr__(self):
         return f"<Picture(id={self.id})>"
+
+
+class News(Base):
+    __tablename__ = 'news'
+    
+    id = Column(Integer, primary_key=True)
+    title = Column(String)
+    body = Column(String)
+    created_at = Column(DateTime, server_default=text('CURRENT_TIMESTAMP'))
+    
+    def __repr__(self):
+        return f"<News(id={self.id} title={self.title})>"
+
+
+# when database.py is called directly, it creates all tables in the database
+if __name__ == "__main__":
+    db = Database()
+    db.create_tables()
