@@ -73,7 +73,7 @@ async def create_upload_file(analyzer: Analyzer = Depends(get_analyzer), image1:
     pred_model = analyzer.models[plant]
 
     # normalize the values
-    np_array = np_array / 255.0
+    # np_array = np_array / 255.0
     
     # add extra dimension for batch size
     input_batch = np.expand_dims(np_array, axis=0) 
