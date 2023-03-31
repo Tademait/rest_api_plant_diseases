@@ -14,3 +14,7 @@ _TOMATO_LABELS = ['bacterial spot', 'early blight', 'late blight',
                   'target spot', 'yellow leaf curl virus', 'mosaic virus', 'healthy']
 
 LABELS = {"tomato": _TOMATO_LABELS}
+
+# image collection configuration
+COLLECTION_ENABLED = True
+COLLECTION_PATH = 'image_collection/'

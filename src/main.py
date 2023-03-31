@@ -6,7 +6,7 @@ import numpy as np
 import config
 from error import ModelNotAvailableError
 import database
-
+from datetime import datetime
 
 class Analyzer:
     def __init__(self):
@@ -64,12 +64,22 @@ async def create_upload_file(analyzer: Analyzer = Depends(get_analyzer), image1:
     if plant not in analyzer.models.keys():
         raise HTTPException(status_code=404, detail="No model available for the provided plant")
     
-    contents = await image1.read()
-    img = Image.open(io.BytesIO(contents))
-    img = img.resize((256, 256))
+    contents1 = await image1.read()
+    img1 = Image.open(io.BytesIO(contents1))
+    img1 = img1.resize((256, 256))
+    
+    contents2 = await image2.read()
+    img2 = Image.open(io.BytesIO(contents2))
+    img2 = img2.resize((256, 256))
+
+    # collect the image to enlarge dataset
+    if config.COLLECTION_ENABLED:
+        file_name = datetime.now().strftime('%Y_%m_%d-%I_%M_%S')
+        img1.save(f"{config.COLLECTION_PATH}/{file_name}-1.jpg")
+        img2.save(f"{config.COLLECTION_PATH}/{file_name}-2.jpg")
 
     # Convert image to numpy array
-    np_array = np.array(img)
+    np_array = np.array(img1)
     pred_model = analyzer.models[plant]
 
     # normalize the values
