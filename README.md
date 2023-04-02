@@ -77,6 +77,15 @@ DB_CONNECTION_STRING="postgresql://username:password@domain:port/db_name"
 
 For a specific port, use the --port <port_number> flag.
 
+# Testing
+To run the tests, run the following command root directory of the project:
+
+```
+pytest
+```
+> Note: make sure you have the pytest library installed: `pip install pytest`
+
+
 # Project overview
 You can find all the available endpoints on the /docs page.
 For example, if you are running the server on localhost, you can access the docs page at http://localhost:8000/docs

@@ -1,7 +1,6 @@
 import pytest
 import requests
 import json
-import pytest
 
 
 class Test_basic:
@@ -9,7 +8,8 @@ class Test_basic:
         response = requests.get("http://localhost:8000/")
         assert response.ok, "Connection to REST API failed"
         
-    @pytest.mark.skip()
-    def test_get_request(self):
-        response = requests.get("http://localhost:8000/analyze")
-        assert response.status_code == 200, "GET request failed"
+    def test_get_plant_list(self):
+        response = requests.get("http://localhost:8000/api/v1/plant_list")
+        assert response.status_code >= 200 and response.status_code < 300,\
+            f"GET request failed with status code: {response.status_code}"
+        assert "tomato" in response.text
