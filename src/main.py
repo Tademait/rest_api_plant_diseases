@@ -64,15 +64,8 @@ async def analyze_images(analyzer: Analyzer = Depends(get_analyzer), image1: Upl
     if plant not in analyzer.models.keys():
         raise HTTPException(status_code=500, detail="No model available for the provided plant")
     
-    # select proper model for the requested plant and get the input dimensions to fit model's input layer
+    # select proper model for the requested plant
     pred_model = analyzer.models[plant]
-    dimensions = pred_model.model.layers[0].input_shape[1:3]
-    print(dimensions)
-    
-    if type(dimensions) is not tuple:
-        raise HTTPException(status_code=500, detail="Model dimensions are not supported")
-    if len(dimensions) != 2:
-        raise HTTPException(status_code=500, detail="Model dimensions are not supported")
     
     contents1 = await image1.read()
     img1 = Image.open(io.BytesIO(contents1))
@@ -89,8 +82,8 @@ async def analyze_images(analyzer: Analyzer = Depends(get_analyzer), image1: Upl
             print("Failed to save images")
 
     # resize the image to input dimensions of the model
-    img1 = img1.resize(dimensions)
-    img2 = img2.resize(dimensions)
+    img1 = img1.resize(config.IMG_DIMENSIONS)
+    img2 = img2.resize(config.IMG_DIMENSIONS)
     
     # Convert images to RGB mode to remove the alpha channel if present
     # for example: user sends a PNG image with transparency
@@ -161,6 +154,4 @@ async def news_list():
 
 if __name__ == "__main__":
     import uvicorn
-    #analyzer = Analyzer()
-    #analyzer.load_all_models()
     uvicorn.run(app, host="localhost", port=8000)

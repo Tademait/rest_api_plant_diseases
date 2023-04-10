@@ -6,7 +6,7 @@ load_dotenv()
 DB_CONNECTION_STRING = os.getenv("DB_CONNECTION_STRING")
 
 # points plant to according model
-MODELS = {"tomato": "tomato_model/v1/"}
+MODELS = {"tomato": "/var/data/tomato_model/v3/"}
 
 # proper labels for each model
 _TOMATO_LABELS = ['bacterial spot', 'early blight', 'late blight',
@@ -18,3 +18,6 @@ LABELS = {"tomato": _TOMATO_LABELS}
 # image collection configuration
 COLLECTION_ENABLED = True
 COLLECTION_PATH = 'image_collection/'
+
+# specify generic input size for models
+IMG_DIMENSIONS = (256, 256)
