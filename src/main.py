@@ -56,7 +56,7 @@ async def test_db(db: database.Database = Depends(get_db)):
     plants = db.query_all_plants()
     if not plants:
         raise HTTPException(status_code=404, detail="No disease available in database")
-    return [{f"plant": plant.name} for plant in plants]
+    return plants
 
 
 @app.post("/api/v1/uploadfile")
