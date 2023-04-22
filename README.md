@@ -1,18 +1,12 @@
 # README file for the Plant Disease Identification API
 
+Author: Tadeas Kozub
+Mail: xkozub06@vutbr.cz
+Year: 2022/2023
+
 A REST API and a plant disease identification app backend that handles database queries, 
 requests to analyze plant disease images and which returns the disease names and the
 confidence level of the prediction.
-
-pozn.:
-+ data augmentation layer probably implicitly gets ignored when using the model.predict() function
-  so it is used only when training the model -> no need to apply the augmentation via the lambdas
-  on the dataset before
-> Note that image data augmentation layers are only active during training (similarly to the Dropout layer).
-(https://keras.io/guides/preprocessing_layers/)
-+ add early stopping to the training process
-+ decide between .h5 and .tf format for the model
-+ add transfer learning to the model and choose a proper base model architecture
 
 
 # Setup:
@@ -24,7 +18,7 @@ Depending on your distribution, install python 3 and pip. For example, on Ubuntu
 sudo apt install python3 python3-pip
 ```
 You can also install python from the official website: https://www.python.org/downloads/
-The application is tested and live version is running on Python 3.10.7
+> Note: The application is tested and live version is running on Python 3.10.7
 
 ## Setup virtual environment
 + Preferably use a Python venv environment (https://docs.python.org/3/library/venv.html)
@@ -78,7 +72,7 @@ DB_CONNECTION_STRING="postgresql://username:password@domain:port/db_name"
 For a specific port, use the --port <port_number> flag.
 
 # Testing
-To run the tests, run the following command root directory of the project:
+To run the tests, run the following command in the root directory of the project:
 
 ```
 pytest
@@ -87,18 +81,21 @@ pytest
 
 
 # Project overview
-You can find all the available endpoints on the /docs page.
+You can find all the available endpoints on the `/docs` page.
 For example, if you are running the server on localhost, you can access the docs page at http://localhost:8000/docs
 
 The main structure of the project is as follows:
 
-the `src` directory contains the trained tensorflow models. The models are loaded in the `main.py` file,
+the `src` directory contains the main source code of the app. The models are loaded in the `main.py` file,
 which is the entry point of the application. They are loaded based on the paths provided in `config.py`.
 The `main.py` file contains the FastAPI endpoints and handling of the incoming requests. The database
-communication and ORM classes are handled inside the `database.py` file. 
+communication and ORM classes are handled inside the `database.py` file. The actual loading of modules is
+handled by the *Analyzer* class in the `analyzer.py` file. 
 
-Currently, a live version of the application is hosted at `render.com` with database being hosted on
-a dedicated VPS at `digitalocean.com`. The live REST API can be accessed at https://plant-rest-api.onrender.com (note that it might take several minutes to spin-up the sleeping container).
+Currently, a live version of the application is hosted at `tkozub.me` with database being hosted on
+a dedicated VPS at `digitalocean.com`. The live REST API can be accessed at https://tkozub.me/api/v1.
+In case there is an issue with the live version, you can run the application locally by following the
+instructions above or you can contact me at `xkozub06@vutbr.cz`.
 
 # Credits
 App is developed under the [Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/legalcode) license.
