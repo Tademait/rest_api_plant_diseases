@@ -1,3 +1,6 @@
+# This file makes pytest work correctly with
+# the structure of src/ and tests/ being in root
+
 [tool.pytest.ini_options]
 pythonpath = [
   "src"

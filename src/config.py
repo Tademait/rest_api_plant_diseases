@@ -5,6 +5,9 @@ import os
 load_dotenv()
 DB_CONNECTION_STRING = os.getenv("DB_CONNECTION_STRING")
 
+# set the port on which the uvicorn server should be running
+PORT = 8000
+
 # points plant to according model
 MODELS = {"tomato": "tomato_model/v1/", "grape": "grape_model/v1/"}
 
