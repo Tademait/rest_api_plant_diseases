@@ -19,10 +19,11 @@ _TOMATO_LABELS = ['bacterial spot', 'early blight', 'late blight',
 _GRAPE_LABELS = ['black rot', 'esca', 'leaf blight', 'healthy']
 
 LABELS = {"tomato": _TOMATO_LABELS, "grape": _GRAPE_LABELS}
+# add any other model here in the same manner...
 
 # image collection configuration
 COLLECTION_ENABLED = True
 COLLECTION_PATH = 'image_collection/'
 
-# specify generic input size for models
+# specify the default input size for models
 IMG_DIMENSIONS = (256, 256)
