@@ -97,7 +97,8 @@ a dedicated VPS at `digitalocean.com`. The live REST API can be accessed at http
 In case there is an issue with the live version, you can run the application locally by following the
 instructions above or you can contact me at `xkozub06@vutbr.cz`.
 
+> Note: Secure connection to the server is provided via Nginx and Let's Encrypt. SSL certs are generated using the tool Certbot.
+
 # Credits
-App is developed under the [Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/legalcode) license.
 
 Plant information, treatment and example disease images are sourced from the [PlantVillage website](https://plantvillage.psu.edu)
