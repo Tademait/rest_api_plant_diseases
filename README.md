@@ -64,6 +64,20 @@ database connection string in the .env file as the following example, replacing 
 DB_CONNECTION_STRING="postgresql://username:password@domain:port/db_name"
 ```
 
+Run the `database.py` file to create the tables in the database:
+
+```
+python src/database.py
+```
+
+# Model setup:
+
+You need to provide the paths to the models in the `config.py` file. Alongside them,
+you need to provide the labels for each output class. The models are then loaded in the 
+`main.py` file. If you want to also provide the user with information about specific disease,
+you need to put these information into the database. The db schema is provided in the
+`database.py` file. The information and example images are optional.
+
 
 # Run:
 
